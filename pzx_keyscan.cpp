@@ -6,9 +6,7 @@
 #include "class/hid/hid.h"
 #include "pzx_keyscan.h"
 
-//Add new define to use ZX Spectum 5x8 real keyboard matrix
-//Comment this line to use Misenko's pico-zxspectrum layout
-#define REAL_ZXKEYBOARD
+// define REAL_ZXKEYBOARD to use ZX Spectum 5x8 real keyboard matrix
 
 #define SAMPLES 4 
 
@@ -85,7 +83,7 @@ static uint8_t kbi = 0;
 static uint8_t kbits[5][6][8] = { 
   // Normal mappings + cursor SymShift = HID_KEY_ALT_RIGHT
   {
-    { HID_KEY_ENTER, HID_KEY_ARROW_LEFT, HID_KEY_ARROW_UP, HID_KEY_ARROW_RIGHT, HID_KEY_ARROW_DOWN, HID_KEY_F1, HID_KEY_F13, HID_KEY_F14 },
+    { HID_KEY_ENTER, HID_KEY_ARROW_LEFT, HID_KEY_ARROW_UP, HID_KEY_ARROW_RIGHT, HID_KEY_ARROW_DOWN, HID_KEY_F1, HID_KEY_F11, HID_KEY_F12 },
     { HID_KEY_B, HID_KEY_H, HID_KEY_V, HID_KEY_Y, HID_KEY_6, HID_KEY_G, HID_KEY_T, HID_KEY_5 },
     { HID_KEY_N, HID_KEY_J, HID_KEY_C, HID_KEY_U, HID_KEY_7, HID_KEY_F, HID_KEY_R, HID_KEY_4 },
     { HID_KEY_M, HID_KEY_K, HID_KEY_X, HID_KEY_I, HID_KEY_8, HID_KEY_D, HID_KEY_E, HID_KEY_3 },
@@ -94,7 +92,7 @@ static uint8_t kbits[5][6][8] = {
   },
   // Shifted normal mappings + cursor
   {
-    { HID_KEY_ESCAPE, HID_KEY_ARROW_LEFT, HID_KEY_ARROW_UP, HID_KEY_ARROW_RIGHT, HID_KEY_ARROW_DOWN, HID_KEY_F1, HID_KEY_F3, HID_KEY_F4 },
+    { HID_KEY_ESCAPE, HID_KEY_ARROW_LEFT, HID_KEY_ARROW_UP, HID_KEY_ARROW_RIGHT, HID_KEY_ARROW_DOWN, HID_KEY_F1, HID_KEY_F11, HID_KEY_F12 },
     { HID_KEY_B, HID_KEY_H, HID_KEY_V, HID_KEY_Y, HID_KEY_6, HID_KEY_G, HID_KEY_T, HID_KEY_5 },
     { HID_KEY_N, HID_KEY_J, HID_KEY_C, HID_KEY_U, HID_KEY_7, HID_KEY_F, HID_KEY_R, HID_KEY_4 },
     { HID_KEY_M, HID_KEY_K, HID_KEY_X, HID_KEY_I, HID_KEY_8, HID_KEY_D, HID_KEY_E, HID_KEY_3 },
@@ -103,7 +101,7 @@ static uint8_t kbits[5][6][8] = {
   },
   // Normal mappings + joystick
   {
-    { 0, 0, 0, 0, 0, HID_KEY_F1, HID_KEY_F3, HID_KEY_F4 },
+    { 0, 0, 0, 0, 0, HID_KEY_F1, HID_KEY_F11, HID_KEY_F12 },
     { HID_KEY_B, HID_KEY_H, HID_KEY_V, HID_KEY_Y, HID_KEY_6, HID_KEY_G, HID_KEY_T, HID_KEY_5 },
     { HID_KEY_N, HID_KEY_J, HID_KEY_C, HID_KEY_U, HID_KEY_7, HID_KEY_F, HID_KEY_R, HID_KEY_4 },
     { HID_KEY_M, HID_KEY_K, HID_KEY_X, HID_KEY_I, HID_KEY_8, HID_KEY_D, HID_KEY_E, HID_KEY_3 },
@@ -112,7 +110,7 @@ static uint8_t kbits[5][6][8] = {
   },
   // Shifted normal mappings + joystick
   {
-    { 0, 0, 0, 0, 0, HID_KEY_F1, HID_KEY_F3, HID_KEY_F4 },
+    { 0, 0, 0, 0, 0, HID_KEY_F1, HID_KEY_F11, HID_KEY_F12 },
     { HID_KEY_B, HID_KEY_H, HID_KEY_V, HID_KEY_Y, HID_KEY_6, HID_KEY_G, HID_KEY_T, HID_KEY_5 },
     { HID_KEY_N, HID_KEY_J, HID_KEY_C, HID_KEY_U, HID_KEY_7, HID_KEY_F, HID_KEY_R, HID_KEY_4 },
     { HID_KEY_M, HID_KEY_K, HID_KEY_X, HID_KEY_I, HID_KEY_8, HID_KEY_D, HID_KEY_E, HID_KEY_3 },
@@ -291,11 +289,6 @@ static uint8_t kbits[5][6][6] = {
     #define KEY_FIRE_BIT 0x01
     #define KEY_SHIFT_ROW 0
     #define KEY_SHIFT_BIT 0x20
-    #define KEY_CURSOR_ROW 6
-    #define KEY_CURSOR_BIT 0x20
-    #define KEY_KEMPSTON_ROW 6
-    #define KEY_KEMPSTON_BIT 0x40 
-    #define LED_PIN 25
   #endif  
 #endif
 
@@ -417,6 +410,7 @@ void __not_in_flash_func(pzx_keyscan_get_hid_reports)(hid_keyboard_report_t cons
   }
 #else
   bool shift = rdb[KEY_SHIFT_ROW] & KEY_SHIFT_BIT;
+  #ifndef REAL_ZXKEYBOARD
   // Cursor mode 
   if (shift) {
     if (rdb[KEY_CURSOR_ROW] & KEY_CURSOR_BIT) { 
@@ -429,6 +423,7 @@ void __not_in_flash_func(pzx_keyscan_get_hid_reports)(hid_keyboard_report_t cons
       gpio_put(LED_PIN, 1);
     }
   }
+  #endif
   kbi = kempstonJoystick + (shift ? 1 : 0 );
 #endif
   
@@ -469,4 +464,3 @@ void __not_in_flash_func(pzx_keyscan_get_hid_reports)(hid_keyboard_report_t cons
   hri++;
   *prev = &hr[hri & 1];
 }
-

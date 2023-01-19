@@ -11,5 +11,6 @@ The Menu can be navigated using the Spectrum's keyboard number keys. There are a
 for setting the Spectrum ROM boot mode and a Joystick Keyboard.
 
 Please see the Schematic diagram for more information on GPIO pins used.
+(Schematic Updated to Rev 1.1 to correct COL GPIO Pins sequence)
 
 <a href="pico-zxspectrum-realkeyboard-schematic.jpg"><img src="pico-zxspectrum-realkeyboard-schematic.jpg" height="200"/>

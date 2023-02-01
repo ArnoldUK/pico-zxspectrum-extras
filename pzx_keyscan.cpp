@@ -6,7 +6,8 @@
 #include "class/hid/hid.h"
 #include "pzx_keyscan.h"
 
-// define REAL_ZXKEYBOARD to use ZX Spectum 5x8 real keyboard matrix
+//define REAL_ZXKEYBOARD to use ZX Spectum 5x8 real keyboard matrix
+#define REAL_ZXKEYBOARD 
 
 #define SAMPLES 4 
 
@@ -271,11 +272,6 @@ static uint8_t kbits[5][6][6] = {
     #define KEY_FIRE_BIT 0x01
     #define KEY_SHIFT_ROW 5
     #define KEY_SHIFT_BIT 0x04
-    #define KEY_CURSOR_ROW 6
-    #define KEY_CURSOR_BIT 0x20
-    #define KEY_KEMPSTON_ROW 6
-    #define KEY_KEMPSTON_BIT 0x40 
-    #define LED_PIN 25
   #else
     #define KEY_UP_ROW 0
     #define KEY_UP_BIT 0x04
@@ -289,6 +285,11 @@ static uint8_t kbits[5][6][6] = {
     #define KEY_FIRE_BIT 0x01
     #define KEY_SHIFT_ROW 0
     #define KEY_SHIFT_BIT 0x20
+    #define KEY_CURSOR_ROW 6
+    #define KEY_CURSOR_BIT 0x20
+    #define KEY_KEMPSTON_ROW 6
+    #define KEY_KEMPSTON_BIT 0x40 
+    #define LED_PIN 25    
   #endif  
 #endif
 
